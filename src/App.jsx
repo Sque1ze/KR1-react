@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import AddForm from "./components/AddForm";
+import AddressTable from "./components/AddressTable";
+import Book from "./models/Book";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [books, setBooks] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const handleAdd = (form) => {
+    const newBook = new Book(Date.now(), form.firstName, form.lastName, form.phone);
+    setBooks([...books, newBook]);
+  };
+
+  const handleUpdate = (updatedBook) => {
+    setBooks(books.map((b) => (b.id === updatedBook.id ? updatedBook : b)));
+  };
+
+  const filtered = books.filter((b) =>
+    `${b.firstName} ${b.lastName}`.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container" style={{ textAlign: "center" }}>
+      <h1>📖 Address Book</h1>
+
+      <input
+        type="text"
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="search-input"
+      />
+
+      <AddForm onAdd={handleAdd} />
+      <AddressTable data={filtered} onUpdate={handleUpdate} />
+    </div>
+  );
 }
 
-export default App
+export default App;
