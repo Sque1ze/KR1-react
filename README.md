@@ -1,4 +1,4 @@
-![Address Book Diagram](assets/diagrame.png)
+![Address Book Diagram](./src/assets/diagrame.png)
 
 Схема компонентів Address Book
 Блоки (прямокутники)
