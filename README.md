@@ -1,16 +1,45 @@
-# React + Vite
+![Address Book Diagram](assets/diagrame.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Схема компонентів Address Book
+Блоки (прямокутники)
 
-Currently, two official plugins are available:
+1. App.jsx
+ -Тип: Container
+ -Властивості: books: array, search: string
+ -Методи: handleAdd(), handleUpdate()
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. AddForm.jsx
+ -Тип: Presentational
+ -Властивості: form state, errors state
+ -Методи: onAdd()
 
-## React Compiler
+3. AddressTable.jsx
+ -Тип: Presentational
+ -Властивості: editingId, editForm
+ -Методи: onUpdate()
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+4. Book (Model)
+ -Властивості: id, firstName, lastName, phone
 
-## Expanding the ESLint configuration
+Стрілки / взаємодія
+ -App.jsx → AddForm.jsx (через проп onAdd)
+ -App.jsx → AddressTable.jsx (через пропси data та onUpdate)
+ -AddForm.jsx → App.jsx (виклик onAdd)
+ -AddressTable.jsx → App.jsx (виклик onUpdate)
+ -App.jsx створює об’єкти Book
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+1. Container/Presentational
+ -App.jsx виступає контейнером: тримає стан контактів (books) і обробляє логіку додавання/редагування.
+ -AddForm.jsx та AddressTable.jsx — презентаційні компоненти, які відображають форму і таблицю, не зберігаючи власний глобальний стан.
+
+2. State Lifting (Піднімання стану)
+ -Стан контактів (books) знаходиться в App.
+ -AddForm та AddressTable отримують колбеки (onAdd, onUpdate) для взаємодії зі станом батьківського компонента.
+
+3. Controlled Components
+ -Форма додавання та інлайн-редагування в таблиці використовують керовані input-поля, значення яких зберігаються у useState.
+
+4. Mapping / List Rendering
+ -Для відображення рядків таблиці використовується метод .map(), який проходить по масиву контактів і генерує елементи <tr>.
